@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>活動レポート | 飯南町 地域おこし協力隊</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:    #0f1a0d;
+      --green:  #1a5c1e;
+      --lime:   #5a9e3a;
+      --accent: #8dc63f;
+      --sand:   #f7f5f0;
+      --muted:  #6b7c69;
+      --border: rgba(0,0,0,0.08);
+      --white:  #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic Pro', sans-serif;
+      color: var(--ink);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── HEADER ─── */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.8);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .site-header .logo {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--green); }
+    .back-link::before { content: '←'; }
+
+    /* ─── HERO ─── */
+    .article-hero {
+      margin-top: 64px;
+      height: 420px;
+      overflow: hidden;
+      background: var(--sand);
+    }
+
+    .article-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ─── ARTICLE ─── */
+    .article-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 64px 32px 100px;
+    }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .article-date {
+      font-size: 13px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .article-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      background: rgba(90,158,58,0.12);
+      color: var(--lime);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .article-title {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+    }
+
+    .article-author {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .article-body {
+      font-size: 16px;
+      line-height: 2;
+      color: #2a2a2a;
+    }
+
+    .article-body p { margin-bottom: 1.6em; }
+
+    /* ─── PREV / NEXT NAV ─── */
+    .article-nav {
+      max-width: 720px;
+      margin: 0 auto 80px;
+      padding: 0 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .nav-card {
+      background: var(--sand);
+      border-radius: 12px;
+      padding: 20px 22px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .nav-card:hover { background: #edf0ea; transform: translateY(-2px); }
+    .nav-card.next { text-align: right; }
+
+    .nav-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--lime);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .nav-card.prev .nav-label::before { content: '← '; }
+    .nav-card.next .nav-label::after  { content: ' →'; }
+
+    .nav-title { font-size: 13px; font-weight: 500; line-height: 1.5; }
+
+    /* ─── STATUS ─── */
+    .status-msg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60vh;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .error-msg {
+      text-align: center;
+      padding: 80px 24px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .error-msg a { color: var(--green); text-decoration: underline; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 36px 24px;
+      font-size: 12px;
+    }
+
+    footer a {
+      color: rgba(255,255,255,0.6);
+      margin: 0 12px;
+      transition: color 0.2s;
+    }
+
+    footer a:hover { color: #fff; }
+
+    @media (max-width: 600px) {
+      .site-header { padding: 0 20px; }
+      .article-hero { height: 240px; }
+      .article-wrap { padding: 40px 20px 72px; }
+      .article-nav { grid-template-columns: 1fr; padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="logo" href="../">飯南町 地域おこし協力隊</a>
+  <a class="back-link" href="../#reports">活動レポート一覧</a>
+</header>
+
+<div id="hero" class="article-hero" style="display:none;">
+  <img id="hero-img" src="" alt="">
+</div>
+
+<div id="status" class="status-msg">読み込み中…</div>
+
+<article id="article" class="article-wrap" style="display:none;">
+  <div class="article-meta">
+    <span id="article-date" class="article-date"></span>
+    <span id="article-tag"  class="article-tag"></span>
+  </div>
+  <h1 id="article-title"  class="article-title"></h1>
+  <div id="article-author" class="article-author"></div>
+  <div id="article-body"  class="article-body"></div>
+</article>
+
+<nav id="article-nav" class="article-nav" style="display:none;"></nav>
+
+<div id="error" class="error-msg" style="display:none;">
+  <p>記事が見つかりませんでした。</p>
+  <p style="margin-top:12px"><a href="../#reports">← 一覧に戻る</a></p>
+</div>
+
+<footer>
+  <a href="../">トップ</a>
+  <a href="../#recruit">募集情報</a>
+  <a href="../#contact">お問い合わせ</a>
+  <p style="margin-top:16px">&copy; 飯南町 地域おこし協力隊</p>
+</footer>
+
+<script>
+  // pages/ から見たサイトルートへのパス
+  const ROOT = '../';
+
+  function formatDate(str) {
+    const [y, m, d] = str.split('-');
+    return `${y}年${parseInt(m)}月${parseInt(d)}日`;
+  }
+
+  function bodyToHtml(text) {
+    return text.trim().split('\n\n').map(p =>
+      `<p>${p.replace(/\n/g, '<br>')}</p>`
+    ).join('');
+  }
+
+  function renderNav(reports, currentId) {
+    const idx = reports.findIndex(r => r.id === currentId);
+    const prev = idx > 0 ? reports[idx - 1] : null;
+    const next = idx < reports.length - 1 ? reports[idx + 1] : null;
+    if (!prev && !next) return;
+
+    const nav = document.getElementById('article-nav');
+    nav.style.display = 'grid';
+
+    nav.innerHTML = prev
+      ? `<a class="nav-card prev" href="report.html?id=${prev.id}">
+           <div class="nav-label">前の記事</div>
+           <div class="nav-title">${prev.title}</div>
+         </a>`
+      : '<div></div>';
+
+    if (next) {
+      nav.innerHTML += `<a class="nav-card next" href="report.html?id=${next.id}">
+           <div class="nav-label">次の記事</div>
+           <div class="nav-title">${next.title}</div>
+         </a>`;
+    }
+  }
+
+  async function init() {
+    const params = new URLSearchParams(location.search);
+    const id = parseInt(params.get('id'), 10);
+
+    try {
+      const res = await fetch(`${ROOT}data/reports.json`);
+      if (!res.ok) throw new Error('fetch failed');
+      const reports = await res.json();
+      const report  = reports.find(r => r.id === id);
+
+      document.getElementById('status').style.display = 'none';
+
+      if (!report) {
+        document.getElementById('error').style.display = 'block';
+        return;
+      }
+
+      document.title = `${report.title} | 飯南町 地域おこし協力隊`;
+
+      // ヒーロー画像
+      const heroEl  = document.getElementById('hero');
+      const heroImg = document.getElementById('hero-img');
+      const fallback = `https://picsum.photos/seed/iinan${report.id}/1200/500`;
+      heroImg.src = `${ROOT}${report.image}`;
+      heroImg.alt = report.title;
+      heroImg.onerror = () => { heroImg.src = fallback; };
+      heroEl.style.display = 'block';
+
+      // 記事
+      document.getElementById('article-date').textContent   = formatDate(report.date);
+      document.getElementById('article-tag').textContent    = report.tag;
+      document.getElementById('article-title').textContent  = report.title;
+      document.getElementById('article-author').textContent = report.author;
+      document.getElementById('article-body').innerHTML     = bodyToHtml(report.body);
+      document.getElementById('article').style.display      = 'block';
+
+      renderNav(reports, id);
+
+    } catch (e) {
+      document.getElementById('status').style.display = 'none';
+      document.getElementById('error').style.display  = 'block';
+      console.error(e);
+    }
+  }
+
+  init();
+</script>
+
+</body>
+</html>

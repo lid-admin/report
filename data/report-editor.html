@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>活動レポート作成ツール | 飯南町</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:    #0f1a0d;
+      --green:  #1a5c1e;
+      --lime:   #5a9e3a;
+      --accent: #8dc63f;
+      --sand:   #f7f5f0;
+      --muted:  #6b7c69;
+      --border: #d8ddd6;
+      --white:  #ffffff;
+      --error:  #c0392b;
+      --radius: 10px;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--sand);
+      color: var(--ink);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--green);
+      color: #fff;
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .title { font-size: 14px; font-weight: 700; letter-spacing: 0.04em; }
+    header .sub   { font-size: 12px; opacity: 0.7; }
+
+    /* ─── LAYOUT ─── */
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* ─── FORM PANEL ─── */
+    .form-panel {
+      padding: 36px 40px;
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      background: var(--white);
+    }
+
+    .panel-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 24px;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    label .required {
+      color: var(--error);
+      margin-left: 3px;
+    }
+
+    label .hint {
+      font-weight: 400;
+      color: #aaa;
+      font-size: 11px;
+      margin-left: 6px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--ink);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--lime);
+      box-shadow: 0 0 0 3px rgba(90,158,58,0.12);
+    }
+
+    textarea {
+      resize: vertical;
+      line-height: 1.7;
+    }
+
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .tag-select-wrap {
+      position: relative;
+    }
+
+    .tag-select-wrap::after {
+      content: '▾';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .body-hint {
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    /* Image preview */
+    .img-preview {
+      margin-top: 8px;
+      height: 80px;
+      border-radius: 8px;
+      border: 1.5px dashed var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #bbb;
+      overflow: hidden;
+    }
+
+    .img-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      padding: 11px 22px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.03em;
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: var(--green);
+      color: #fff;
+      flex: 1;
+    }
+
+    .btn-primary:hover { background: var(--lime); }
+
+    .btn-secondary {
+      background: var(--sand);
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-secondary:hover { background: #eaeae5; }
+
+    /* ─── OUTPUT PANEL ─── */
+    .output-panel {
+      padding: 36px 40px;
+      overflow-y: auto;
+      background: #1a2018;
+      color: #d4e8c8;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .output-header .panel-title { color: var(--accent); }
+
+    .copy-btn {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .copy-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .copy-btn.copied { background: rgba(90,158,58,0.3); color: var(--accent); border-color: var(--accent); }
+
+    pre {
+      flex: 1;
+      font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      word-break: break-all;
+      color: #d4e8c8;
+    }
+
+    /* JSON syntax highlight */
+    .json-key   { color: #89cff0; }
+    .json-str   { color: #b5f0a5; }
+    .json-num   { color: #ffcc80; }
+    .json-punct { color: #888; }
+
+    /* Instruction box */
+    .instruction {
+      margin-top: 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.75;
+    }
+
+    .instruction strong { color: rgba(255,255,255,0.8); }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--green);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .form-panel { border-right: none; border-bottom: 1px solid var(--border); }
+      header { padding: 0 20px; }
+      .form-panel, .output-panel { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="title">活動レポート作成ツール</div>
+  <div class="sub">飯南町 地域おこし協力隊 / data/reports.json</div>
+</header>
+
+<div class="layout">
+
+  <!-- ─── FORM ─── -->
+  <div class="form-panel">
+    <div class="panel-title">記事情報を入力</div>
+
+    <div class="row2">
+      <div class="field">
+        <label>ID <span class="required">*</span><span class="hint">既存の最大+1</span></label>
+        <input type="number" id="f-id" min="1" placeholder="4">
+      </div>
+      <div class="field">
+        <label>投稿日 <span class="required">*</span></label>
+        <input type="date" id="f-date">
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label>タグ <span class="required">*</span></label>
+        <div class="tag-select-wrap">
+          <select id="f-tag">
+            <option value="農業">農業</option>
+            <option value="観光">観光</option>
+            <option value="教育">教育</option>
+            <option value="イベント">イベント</option>
+            <option value="ITリスキリング">ITリスキリング</option>
+            <option value="その他">その他</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>著者</label>
+        <input type="text" id="f-author" placeholder="協力隊員 A">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>タイトル <span class="required">*</span></label>
+      <input type="text" id="f-title" placeholder="地元農家さんと一緒に田植えをしました">
+    </div>
+
+    <div class="field">
+      <label>サマリー <span class="required">*</span><span class="hint">一覧カードに表示される短い説明</span></label>
+      <textarea id="f-summary" rows="2" placeholder="棚田での田植え作業に参加。ITを活用したスマート農業の可能性について…"></textarea>
+    </div>
+
+    <div class="field">
+      <label>本文 <span class="required">*</span></label>
+      <textarea id="f-body" rows="8" placeholder="本文を入力してください。&#10;&#10;空行で段落が分かれます。"></textarea>
+      <div class="body-hint">空行（Enter 2回）で段落を区切ってください。サイト上で &lt;p&gt; タグに変換されます。</div>
+    </div>
+
+    <div class="field">
+      <label>画像ファイル名<span class="hint">images/ フォルダに入れる</span></label>
+      <input type="text" id="f-image" placeholder="images/report-004.jpg">
+      <div class="img-preview" id="img-preview">
+        <img id="preview-img" src="" alt="">
+        <span id="preview-label">画像パスを入力するとプレビュー</span>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="generate()">JSON を生成</button>
+      <button class="btn btn-secondary" onclick="clearForm()">クリア</button>
+    </div>
+  </div>
+
+  <!-- ─── OUTPUT ─── -->
+  <div class="output-panel">
+    <div class="output-header">
+      <div class="panel-title">生成された JSON</div>
+      <button class="copy-btn" id="copy-btn" onclick="copyJson()">コピー</button>
+    </div>
+    <pre id="output">// フォームを入力して「JSON を生成」を押してください</pre>
+
+    <div class="instruction">
+      <strong>reports.json への追加方法</strong><br>
+      1. 上の JSON をコピー<br>
+      2. <code>data/reports.json</code> を開く<br>
+      3. 配列の末尾（最後の <code>}</code> の後、<code>]</code> の前）に <code>,</code> を追加して貼り付ける<br>
+      4. 保存して GitHub に push
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast">コピーしました！</div>
+
+<script>
+  // 今日の日付をデフォルト設定
+  const today = new Date().toISOString().slice(0, 10);
+  document.getElementById('f-date').value = today;
+
+  // 画像プレビュー
+  document.getElementById('f-image').addEventListener('input', function () {
+    const path = this.value.trim();
+    const img   = document.getElementById('preview-img');
+    const label = document.getElementById('preview-label');
+    if (path) {
+      img.src = '../' + path;
+      img.style.display = 'block';
+      label.style.display = 'none';
+      img.onerror = () => {
+        img.style.display = 'none';
+        label.textContent = '画像が見つかりません';
+        label.style.display = 'block';
+      };
+      img.onload = () => {
+        label.style.display = 'none';
+      };
+    } else {
+      img.style.display = 'none';
+      label.textContent = '画像パスを入力するとプレビュー';
+      label.style.display = 'block';
+    }
+  });
+
+  // JSON シンタックスハイライト
+  function highlight(json) {
+    return json
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"(\\u[0-9a-fA-F]{4}|\\[^u]|[^"\\])*"(\s*:)?/g, (m) =>
+        m.endsWith(':')
+          ? `<span class="json-key">${m}</span>`
+          : `<span class="json-str">${m}</span>`
+      )
+      .replace(/\b(\d+)\b/g, '<span class="json-num">$1</span>')
+      .replace(/[{}\[\],]/g, '<span class="json-punct">$&</span>');
+  }
+
+  // JSON 生成
+  function generate() {
+    const id      = parseInt(document.getElementById('f-id').value);
+    const date    = document.getElementById('f-date').value;
+    const tag     = document.getElementById('f-tag').value;
+    const author  = document.getElementById('f-author').value.trim();
+    const title   = document.getElementById('f-title').value.trim();
+    const summary = document.getElementById('f-summary').value.trim();
+    const body    = document.getElementById('f-body').value.trim();
+    const image   = document.getElementById('f-image').value.trim() || `images/report-${String(id).padStart(3,'0')}.jpg`;
+
+    // バリデーション
+    const errors = [];
+    if (!id || isNaN(id))   errors.push('ID');
+    if (!date)              errors.push('投稿日');
+    if (!title)             errors.push('タイトル');
+    if (!summary)           errors.push('サマリー');
+    if (!body)              errors.push('本文');
+
+    if (errors.length) {
+      document.getElementById('output').innerHTML =
+        `<span style="color:#ff8080">// 必須項目が未入力です：${errors.join('、')}</span>`;
+      return;
+    }
+
+    const obj = {
+      id,
+      date,
+      tag,
+      title,
+      summary,
+      body,
+      image,
+      author: author || '協力隊員'
+    };
+
+    const json = JSON.stringify(obj, null, 2);
+    document.getElementById('output').innerHTML = highlight(json);
+
+    // コピーボタンをリセット
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'コピー';
+    btn.classList.remove('copied');
+    btn._json = json;
+  }
+
+  // コピー
+  function copyJson() {
+    const btn = document.getElementById('copy-btn');
+    const json = btn._json;
+    if (!json) return;
+    navigator.clipboard.writeText(json).then(() => {
+      btn.textContent = '✓ コピー済み';
+      btn.classList.add('copied');
+      showToast('コピーしました！');
+      setTimeout(() => {
+        btn.textContent = 'コピー';
+        btn.classList.remove('copied');
+      }, 2500);
+    });
+  }
+
+  // クリア
+  function clearForm() {
+    document.getElementById('f-id').value      = '';
+    document.getElementById('f-date').value    = today;
+    document.getElementById('f-tag').value     = '農業';
+    document.getElementById('f-author').value  = '';
+    document.getElementById('f-title').value   = '';
+    document.getElementById('f-summary').value = '';
+    document.getElementById('f-body').value    = '';
+    document.getElementById('f-image').value   = '';
+    document.getElementById('output').innerHTML = '// フォームを入力して「JSON を生成」を押してください';
+    document.getElementById('preview-img').style.display = 'none';
+    document.getElementById('preview-label').textContent = '画像パスを入力するとプレビュー';
+    document.getElementById('preview-label').style.display = 'block';
+  }
+
+  // トースト
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+</script>
+
+</body>
+</html>
