@@ -135,6 +135,40 @@
 
     .article-body p { margin-bottom: 1.6em; }
 
+    /* ─── IN-ARTICLE IMAGES ─── */
+    .article-images {
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .article-images-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .article-images-grid.single {
+      grid-template-columns: 1fr;
+    }
+
+    .article-image-item {
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--sand);
+    }
+
+    .article-image-item img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .article-images-grid.single .article-image-item img {
+      height: 420px;
+    }
+
     /* ─── PREV / NEXT NAV ─── */
     .article-nav {
       max-width: 720px;
@@ -234,6 +268,7 @@
   <h1 id="article-title"  class="article-title"></h1>
   <div id="article-author" class="article-author"></div>
   <div id="article-body"  class="article-body"></div>
+  <div id="article-images" class="article-images" style="display:none;"></div>
 </article>
 
 <nav id="article-nav" class="article-nav" style="display:none;"></nav>
@@ -323,6 +358,21 @@
       document.getElementById('article-title').textContent  = report.title;
       document.getElementById('article-author').textContent = report.author;
       document.getElementById('article-body').innerHTML     = bodyToHtml(report.body);
+
+      // 記事内画像
+      const imgs = Array.isArray(report.images) ? report.images.filter(Boolean) : [];
+      if (imgs.length > 0) {
+        const imagesEl = document.getElementById('article-images');
+        const gridClass = imgs.length === 1 ? 'article-images-grid single' : 'article-images-grid';
+        imagesEl.innerHTML = `<div class="${gridClass}">` +
+          imgs.map(src => `
+            <div class="article-image-item">
+              <img src="${ROOT}${src}" alt="" loading="lazy">
+            </div>`).join('') +
+          `</div>`;
+        imagesEl.style.display = 'block';
+      }
+
       document.getElementById('article').style.display      = 'block';
 
       renderNav(reports, id);
