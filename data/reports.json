@@ -23,7 +23,7 @@
   },
   {
     "id": 3,
-    "date": "",
+    "date": "2026-06-14",
     "tag": "教育",
     "title": "病児病後児保育「ぱぷりか」",
     "summary": "",
@@ -53,5 +53,19 @@
     "image": "",
     "images": [],
     "author": "倉本健太"
+  },
+  {
+    "id": 6,
+    "date": "2026-06-23",
+    "tag": "イベント",
+    "title": "プログラミング経験ゼロでOKの「LINE AI秘書」開発ハンズオンを開催しました！",
+    "summary": "島根県飯南町初開催！初心者miiboでAI LINE BotとRAG構築までやってみようハンズオンを開催しました！",
+    "body": "イベント概要：\nhttps://linedevelopercommunity.connpass.com/event/397941/\n\nイベントの様子：\nhttps://posfie.com/@n0bisuke/p/1tS1pYi",
+    "image": "images/6-1.jpeg",
+    "images": [
+      "images/6-1.jpeg",
+      "images/6-2.jpeg"
+    ],
+    "author": "倉本健太・宮本雅也・君塚月奈・和田真弥"
   }
 ]

@@ -135,6 +135,13 @@
 
     .article-body p { margin-bottom: 1.6em; }
 
+    .article-body a {
+      color: var(--lime);
+      text-decoration: underline;
+      word-break: break-all;
+    }
+    .article-body a:hover { color: var(--green); }
+
     /* ─── IN-ARTICLE IMAGES ─── */
     .article-images {
       margin-top: 40px;
@@ -295,9 +302,12 @@
   }
 
   function bodyToHtml(text) {
-    return text.trim().split('\n\n').map(p =>
-      `<p>${p.replace(/\n/g, '<br>')}</p>`
-    ).join('');
+    return text.trim().split('\n\n').map(p => {
+      const withBr = p.replace(/\n/g, '<br>');
+      const withLinks = withBr.replace(/(https?:\/\/[^\s<]+)/g,
+        '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+      return `<p>${withLinks}</p>`;
+    }).join('');
   }
 
   function renderNav(reports, currentId) {
