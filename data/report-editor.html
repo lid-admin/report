@@ -565,8 +565,7 @@
     </div>
 
     <div class="btn-group">
-      <button class="btn btn-primary" id="save-btn" onclick="saveEntry()">保存して JSON に反映</button>
-      <button class="btn btn-secondary" onclick="newEntry()">クリア</button>
+      <button class="btn btn-secondary" onclick="newEntry()">クリア / 新規</button>
     </div>
   </div>
 
@@ -651,7 +650,6 @@
     renderList();
     document.getElementById('editing-badge').style.display = 'inline';
     document.getElementById('editing-badge').textContent = `ID ${id} 編集中`;
-    document.getElementById('save-btn').textContent = '更新して JSON に反映';
   }
 
   // ─── NEW ENTRY ───
@@ -661,7 +659,6 @@
     populateForm({ id: maxId, date: today, tag: '', author: '', title: '', summary: '', body: '', image: '', images: [] });
     renderList();
     document.getElementById('editing-badge').style.display = 'none';
-    document.getElementById('save-btn').textContent = '追加して JSON に反映';
     document.getElementById('f-id').value = maxId;
   }
 
@@ -690,7 +687,7 @@
     row.className = 'image-row';
     row.innerHTML = `
       <input type="text" placeholder="images/report-001-photo1.jpg" value="${escHtml(value)}">
-      <button type="button" class="btn-remove-image" onclick="this.parentElement.remove()" title="削除">✕</button>
+      <button type="button" class="btn-remove-image" onclick="this.parentElement.remove(); autoSave();" title="削除">✕</button>
     `;
     list.appendChild(row);
   }
@@ -702,49 +699,36 @@
       .filter(Boolean);
   }
 
-  // ─── SAVE ENTRY ───
-  function saveEntry() {
-    const id      = parseInt(document.getElementById('f-id').value);
-    const date    = document.getElementById('f-date').value;
-    const tag     = document.getElementById('f-tag').value;
-    const author  = document.getElementById('f-author').value.trim();
-    const title   = document.getElementById('f-title').value.trim();
-    const summary = document.getElementById('f-summary').value.trim();
-    const body    = document.getElementById('f-body').value.trim();
-    const image   = document.getElementById('f-image').value.trim();
-
-    if (!title) { showToast('タイトルは必須です', true); return; }
-    if (!body)  { showToast('本文は必須です', true); return; }
-
-    const images = getImagesFromForm();
-    const obj = { id, date, tag, title, summary, body, image, images, author };
-
+  // ─── AUTO SAVE ───
+  function autoSave() {
+    const id = parseInt(document.getElementById('f-id').value);
+    if (!id) return;
+    const obj = {
+      id,
+      date:    document.getElementById('f-date').value,
+      tag:     document.getElementById('f-tag').value,
+      author:  document.getElementById('f-author').value.trim(),
+      title:   document.getElementById('f-title').value.trim(),
+      summary: document.getElementById('f-summary').value.trim(),
+      body:    document.getElementById('f-body').value.trim(),
+      image:   document.getElementById('f-image').value.trim(),
+      images:  getImagesFromForm(),
+    };
     if (editingId !== null) {
-      // update existing
       const idx = entries.findIndex(e => e.id === editingId);
       if (idx !== -1) entries[idx] = obj;
     } else {
-      // add new — check id collision
-      if (entries.some(e => e.id === id)) {
-        showToast(`ID ${id} はすでに存在します`, true);
-        return;
-      }
+      if (entries.some(e => e.id === id)) return;
       entries.push(obj);
+      editingId = id;
+      document.getElementById('editing-badge').style.display = 'inline';
+      document.getElementById('editing-badge').textContent = `ID ${id} 編集中`;
     }
-
-    editingId = obj.id;
     renderList();
     renderJson();
-
     const badge = document.getElementById('loaded-badge');
     badge.textContent = `${entries.length} 件`;
     badge.style.display = 'inline';
-
-    document.getElementById('editing-badge').style.display = 'inline';
-    document.getElementById('editing-badge').textContent = `ID ${obj.id} 編集中`;
-    document.getElementById('save-btn').textContent = '更新して JSON に反映';
-
-    showToast(editingId !== null ? 'ID ' + obj.id + ' を更新しました' : 'エントリを追加しました');
   }
 
   // ─── DELETE ENTRY ───
@@ -852,6 +836,14 @@
 
   // 初期ID設定
   document.getElementById('f-id').value = 1;
+
+  // ─── REALTIME AUTO SAVE ───
+  ['f-date', 'f-tag', 'f-author', 'f-title', 'f-summary', 'f-body', 'f-image'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', autoSave);
+    el.addEventListener('change', autoSave);
+  });
+  document.getElementById('images-list').addEventListener('input', autoSave);
 </script>
 
 </body>
