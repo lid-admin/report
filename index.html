@@ -969,7 +969,7 @@
         container.innerHTML = items.map(item => {
           const isInternal = item.url.startsWith('#');
           const attrs = isInternal ? '' : ' target="_blank" rel="noopener"';
-          const arrow = isInternal ? '↓' : '↗';
+          const arrow = isInternal ? '' : '↗';
           const date = item.date ? `<span class="card-date">${fmtDate(item.date)}</span>` : '';
           return `
         <div class="news-item">
