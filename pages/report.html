@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>活動レポート | 飯南町 地域おこし協力隊</title>
+  <meta name="description" content="飯南町 地域おこし協力隊の活動レポート。島根県飯南町でのIT×地域協力活動の記録です。">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" id="meta-canonical" href="https://report.lid-iinan.com/pages/report.html">
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" id="og-title" content="活動レポート | 飯南町 地域おこし協力隊">
+  <meta property="og:description" id="og-description" content="飯南町 地域おこし協力隊の活動レポート。島根県飯南町でのIT×地域協力活動の記録です。">
+  <meta property="og:url" id="og-url" content="https://report.lid-iinan.com/pages/report.html">
+  <meta property="og:image" id="og-image" content="https://report.lid-iinan.com/images/hero.jpg">
+  <meta property="og:site_name" content="飯南町 地域おこし協力隊 | Local Impact Design飯南">
+  <meta property="og:locale" content="ja_JP">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" id="tw-title" content="活動レポート | 飯南町 地域おこし協力隊">
+  <meta name="twitter:description" id="tw-description" content="飯南町 地域おこし協力隊の活動レポート。島根県飯南町でのIT×地域協力活動の記録です。">
+  <meta name="twitter:image" id="tw-image" content="https://report.lid-iinan.com/images/hero.jpg">
   <link rel="icon" href="../images/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
@@ -354,6 +370,22 @@
       }
 
       document.title = `${report.title} | 飯南町 地域おこし協力隊`;
+
+      // SEO: OG / Twitter メタタグを動的に更新
+      const pageUrl = `https://report.lid-iinan.com/pages/report.html?id=${id}`;
+      const ogImg   = `https://report.lid-iinan.com/${report.image}`;
+      const desc    = report.summary || `${report.title} - 飯南町 地域おこし協力隊の活動レポートです。`;
+      document.getElementById('meta-canonical').href             = pageUrl;
+      document.getElementById('og-title').content               = document.title;
+      document.getElementById('og-description').content         = desc;
+      document.getElementById('og-url').content                 = pageUrl;
+      document.getElementById('og-image').content               = ogImg;
+      document.getElementById('tw-title').content               = document.title;
+      document.getElementById('tw-description').content         = desc;
+      document.getElementById('tw-image').content               = ogImg;
+      // description メタタグも更新
+      let descMeta = document.querySelector('meta[name="description"]');
+      if (descMeta) descMeta.content = desc;
 
       // ヒーロー画像
       const heroEl  = document.getElementById('hero');
