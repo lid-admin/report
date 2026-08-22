@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.dataset.js = '1';</script>
   <title>飯南町 地域おこし協力隊 活動報告 | Local Impact Design飯南</title>
   <meta name="description" content="島根県飯石郡飯南町でLocal Impact Design飯南株式会社が受け入れる地域おこし協力隊の活動記録。農業・観光・教育×IT分野での取り組みや募集情報をお届けします。">
   <meta name="keywords" content="地域おこし協力隊,飯南町,島根県,Local Impact Design,農業,観光,教育,IT,移住,スマート農業">
@@ -53,10 +54,22 @@
       --border: rgba(0, 0, 0, 0.08);
       --white: #ffffff;
       --radius: 14px;
+      /* ─── RESPONSIVE TOKENS ─── */
+      --pad-x: 60px;
+      --header-pad-x: 40px;
+      --header-h: 64px;
     }
 
     html {
       scroll-behavior: smooth;
+    }
+
+    #news,
+    #reports,
+    #about,
+    #recruit,
+    #contact {
+      scroll-margin-top: var(--header-h);
     }
 
     body {
@@ -83,8 +96,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 40px;
-      height: 64px;
+      padding: 0 var(--header-pad-x);
+      min-height: var(--header-h);
+      gap: 8px;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       background: rgba(255, 255, 255, 0.7);
@@ -115,6 +129,38 @@
       color: var(--green);
     }
 
+    /* ─── HAMBURGER ─── */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: var(--green);
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .site-header.is-open .nav-toggle span:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+
+    .site-header.is-open .nav-toggle span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-header.is-open .nav-toggle span:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+
     /* ─── HERO ─── */
     .hero {
       position: relative;
@@ -123,7 +169,7 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 80px 60px;
+      padding: 80px var(--pad-x);
       overflow: hidden;
     }
 
@@ -239,7 +285,7 @@
 
     /* ─── SECTION BASE ─── */
     .section {
-      padding: 100px 60px;
+      padding: 100px var(--pad-x);
       max-width: 1100px;
       margin: 0 auto;
     }
@@ -400,7 +446,7 @@
     .band {
       background: var(--ink);
       color: #fff;
-      padding: 80px 60px;
+      padding: 80px var(--pad-x);
     }
 
     .band-inner {
@@ -496,7 +542,7 @@
 
     .recruit-card .dl-row {
       display: grid;
-      grid-template-columns: 6em 1fr;
+      grid-template-columns: 6.8em 1fr;
       gap: 8px;
     }
 
@@ -583,10 +629,18 @@
     }
 
     .contact-tel {
-      font-size: 28px;
+      font-size: clamp(17px, 5.2vw, 28px);
       font-weight: 700;
       letter-spacing: 0.03em;
       color: var(--green);
+    }
+
+    .contact-tel-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      color: inherit;
+      white-space: nowrap;
     }
 
     .contact-tel small {
@@ -608,7 +662,7 @@
     footer {
       background: var(--ink);
       color: rgba(255, 255, 255, 0.5);
-      padding: 56px 60px 40px;
+      padding: 56px var(--pad-x) 40px;
     }
 
     .footer-inner {
@@ -690,6 +744,7 @@
     }
 
     .news-item-title {
+      overflow-wrap: break-word;
       font-size: 14px;
       font-weight: 500;
       line-height: 1.6;
@@ -709,23 +764,100 @@
     }
 
     /* ─── RESPONSIVE ─── */
-    @media (max-width: 800px) {
-      .site-header {
-        padding: 0 24px;
+    /* ブレークポイントは この順序 で記述すること。
+       1〜3 は同一詳細度で範囲が重なるため、トークンの解決がソース順に依存する。 */
+
+    /* ─── TABLET (768-1024px) ─── */
+    @media (max-width: 1024px) {
+      :root {
+        --pad-x: 40px;
+        --header-pad-x: 32px;
+      }
+    }
+
+    /* ─── MOBILE (~767px) ─── */
+    @media (max-width: 767px) {
+      :root {
+        --pad-x: 20px;
+        --header-pad-x: 20px;
+        --header-h: 56px;
+      }
+
+      /* ヘッダー */
+      .site-header .logo {
+        font-size: 12px;
       }
 
       .site-header nav {
         gap: 20px;
       }
 
+      [data-js="1"] .nav-toggle {
+        display: inline-flex;
+        width: 44px;
+        height: 44px;
+        align-items: center;
+        justify-content: center;
+      }
+
+      [data-js="1"] .site-header nav {
+        display: none;
+      }
+
+      [data-js="1"] .site-header.is-open nav {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: var(--header-h);
+        left: 0;
+        right: 0;
+        gap: 0;
+        padding: 4px var(--header-pad-x) 12px;
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+        max-height: calc(100vh - var(--header-h));
+        max-height: calc(100svh - var(--header-h));
+        overflow-y: auto;
+      }
+
+      [data-js="1"] .site-header.is-open nav a {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+      }
+
+      /* JS無効時のフォールバック: nav だけでなく .site-header 自身も折り返す必要がある */
+      html:not([data-js="1"]) .site-header {
+        flex-wrap: wrap;
+      }
+
+      html:not([data-js="1"]) .site-header nav {
+        flex-wrap: wrap;
+      }
+
+      /* ヒーロー */
       .hero {
-        padding: 80px 28px 56px;
+        padding: 80px var(--pad-x) 56px;
       }
 
+      .hero-scroll {
+        display: none;
+      }
+
+      /* セクション */
       .section {
-        padding: 72px 28px;
+        padding: 72px var(--pad-x);
       }
 
+      .band {
+        padding: 60px var(--pad-x);
+      }
+
+      footer {
+        padding: 48px var(--pad-x) 32px;
+      }
+
+      /* レポートカード */
       .bento {
         grid-template-columns: 1fr;
       }
@@ -735,38 +867,102 @@
         grid-column: span 1;
       }
 
-      .bento-card.featured img {
-        height: 220px;
+      /* ベース宣言 .bento-card.featured img は詳細度 (0,2,1)。
+         メディアクエリは詳細度を加算しないため .bento-card img では上書きできない。 */
+      .bento-card.featured img,
+      .bento-card.side img {
+        height: auto;
+        aspect-ratio: 16 / 9;
       }
 
-      .band {
-        padding: 60px 28px;
+      /* ニュース */
+      .news-item {
+        padding: 0;
       }
 
+      .news-item a {
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 10px;
+        padding: 12px 0;
+        min-height: 44px;
+      }
+
+      .news-item-arrow {
+        order: 1;
+        margin-left: auto;
+      }
+
+      .news-item-title {
+        order: 2;
+        flex: 1 1 100%;
+      }
+
+      /* 取組について */
       .band-inner {
         grid-template-columns: 1fr;
         gap: 36px;
       }
 
+      /* 募集情報 */
       .recruit-grid {
         grid-template-columns: 1fr;
       }
 
+      .recruit-card .dl-row {
+        grid-template-columns: 1fr;
+        gap: 2px;
+      }
+
+      /* お問い合わせ */
       .contact-wrap {
         grid-template-columns: 1fr;
-        padding: 36px 28px;
+        padding: 28px 20px;
       }
 
-      footer {
-        padding: 48px 28px 32px;
-      }
-
+      /* フッター */
       .footer-inner {
         flex-direction: column;
       }
 
       .footer-sns {
         align-items: flex-start;
+      }
+
+      .footer-sns a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+      }
+    }
+
+    /* ─── SMALL PHONE (~374px) ─── */
+    @media (max-width: 374px) {
+      :root {
+        --pad-x: 16px;
+        --header-pad-x: 16px;
+      }
+    }
+
+    /* ─── LANDSCAPE / SHORT VIEWPORT ─── */
+    @media (orientation: landscape) and (max-height: 500px) {
+      .hero {
+        height: auto;
+        min-height: 0;
+        padding-top: calc(var(--header-h) + 32px);
+        padding-bottom: 40px;
+      }
+    }
+
+    /* ─── REDUCED MOTION ─── */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-scroll::after {
+        animation: none;
+      }
+
+      .site-header nav,
+      .nav-toggle span {
+        transition: none;
       }
     }
   </style>
@@ -777,13 +973,19 @@
   <!-- ─── HEADER ─── -->
   <header class="site-header">
     <a class="logo" href="./">Local Impact Design飯南株式会社</a>
-    <nav>
+    <nav id="site-nav">
       <a href="#news">ニュース</a>
       <a href="#reports">活動レポート</a>
       <a href="#about">取組について</a>
       <a href="#recruit">募集情報</a>
       <a href="#contact">お問い合わせ</a>
     </nav>
+    <button class="nav-toggle" id="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false"
+      aria-label="メニューを開く">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </header>
 
   <!-- ─── HERO ─── -->
@@ -894,7 +1096,7 @@
         <h3>お問い合わせ</h3>
         <p class="sub">活動・連携・移住に関するご質問はお気軽にどうぞ。</p>
         <div class="contact-tel">
-          0854-62-3122
+          <a class="contact-tel-link" href="tel:0854623122">0854-62-3122</a>
           <small>Local Impact Design 飯南株式会社（平日 9:00〜17:00）</small>
         </div>
       </div>
@@ -930,11 +1132,10 @@
     }
 
     function buildCard(report, type) {
-      const imgH = type === 'featured' ? '280px' : '160px';
       const fallback = `https://picsum.photos/seed/iinan${report.id}/800/400`;
       return `
       <a class="bento-card ${type}" href="pages/report.html?id=${report.id}">
-        <img src="${IMG_BASE}${report.image}" alt="${report.title}" style="height:${imgH};"
+        <img src="${IMG_BASE}${report.image}" alt="${report.title}"
              onerror="this.src='${fallback}'">
         <div class="card-body">
           <div class="card-meta">
@@ -1005,6 +1206,42 @@
     }
 
     loadNews();
+
+    // ─── モバイルナビ（折りたたみ） ───
+    function initMobileNav() {
+      const header = document.querySelector('.site-header');
+      const btn = document.getElementById('nav-toggle');
+      const nav = document.getElementById('site-nav');
+      if (!header || !btn || !nav) return;
+
+      function setOpen(open) {
+        header.classList.toggle('is-open', open);
+        btn.setAttribute('aria-expanded', String(open));
+        btn.setAttribute('aria-label', open ? 'メニューを閉じる' : 'メニューを開く');
+      }
+
+      btn.addEventListener('click', () => {
+        setOpen(btn.getAttribute('aria-expanded') !== 'true');
+      });
+
+      nav.addEventListener('click', (e) => {
+        if (e.target.closest('a')) setOpen(false);
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+          setOpen(false);
+          btn.focus();
+        }
+      });
+
+      const mql = window.matchMedia('(min-width: 768px)');
+      mql.addEventListener('change', (e) => {
+        if (e.matches) setOpen(false);
+      });
+    }
+
+    initMobileNav();
   </script>
 
 </body>

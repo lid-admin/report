@@ -35,6 +35,10 @@
       --muted:  #6b7c69;
       --border: rgba(0,0,0,0.08);
       --white:  #ffffff;
+      /* ─── RESPONSIVE TOKENS ─── */
+      --pad-x:        32px;
+      --header-pad-x: 40px;
+      --header-h:     64px;
     }
 
     html { scroll-behavior: smooth; }
@@ -56,8 +60,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 40px;
-      height: 64px;
+      padding: 0 var(--header-pad-x);
+      min-height: var(--header-h);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       background: rgba(255,255,255,0.8);
@@ -85,7 +89,7 @@
 
     /* ─── HERO ─── */
     .article-hero {
-      margin-top: 64px;
+      margin-top: var(--header-h);
       height: 420px;
       overflow: hidden;
       background: var(--sand);
@@ -102,7 +106,7 @@
     .article-wrap {
       max-width: 720px;
       margin: 0 auto;
-      padding: 64px 32px 100px;
+      padding: 64px var(--pad-x) 100px;
     }
 
     .article-meta {
@@ -145,6 +149,7 @@
     }
 
     .article-body {
+      overflow-wrap: break-word;
       font-size: 16px;
       line-height: 2;
       color: #2a2a2a;
@@ -170,6 +175,7 @@
       display: grid;
       gap: 12px;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      align-items: start;
     }
 
     .article-images-grid.single {
@@ -184,20 +190,18 @@
 
     .article-image-item img {
       width: 100%;
-      height: 260px;
-      object-fit: cover;
+      height: auto;
+      max-height: 70vh;
+      max-height: 70svh;
+      object-fit: contain;
       display: block;
-    }
-
-    .article-images-grid.single .article-image-item img {
-      height: 420px;
     }
 
     /* ─── PREV / NEXT NAV ─── */
     .article-nav {
       max-width: 720px;
       margin: 0 auto 80px;
-      padding: 0 32px;
+      padding: 0 var(--pad-x);
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
@@ -233,6 +237,7 @@
       align-items: center;
       justify-content: center;
       height: 60vh;
+      height: 60svh;
       font-size: 14px;
       color: var(--muted);
     }
@@ -263,11 +268,50 @@
 
     footer a:hover { color: #fff; }
 
-    @media (max-width: 600px) {
-      .site-header { padding: 0 20px; }
-      .article-hero { height: 240px; }
-      .article-wrap { padding: 40px 20px 72px; }
-      .article-nav { grid-template-columns: 1fr; padding: 0 20px; }
+    /* ─── RESPONSIVE ─── */
+    /* ブレークポイントは この順序 で記述すること（同一詳細度・範囲が重なるため） */
+
+    /* ─── TABLET (~1024px) ─── */
+    @media (max-width: 1024px) {
+      .article-hero {
+        height: auto;
+        aspect-ratio: 16 / 9;
+        max-height: 60vh;
+        max-height: 60svh;
+      }
+    }
+
+    /* ─── MOBILE (~767px) ─── */
+    @media (max-width: 767px) {
+      :root {
+        --pad-x:        20px;
+        --header-pad-x: 20px;
+      }
+
+      .article-wrap { padding: 40px var(--pad-x) 72px; }
+      .article-nav  { grid-template-columns: 1fr; }
+      .article-images-grid { grid-template-columns: 1fr; }
+
+      footer a {
+        display: inline-block;
+        padding: 12px;
+        min-height: 44px;
+        margin: 0;
+      }
+
+      .error-msg a {
+        display: inline-block;
+        padding: 12px;
+        min-height: 44px;
+      }
+    }
+
+    /* ─── SMALL PHONE (~374px) ─── */
+    @media (max-width: 374px) {
+      :root {
+        --pad-x:        16px;
+        --header-pad-x: 16px;
+      }
     }
   </style>
 </head>
