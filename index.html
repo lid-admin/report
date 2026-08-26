@@ -658,6 +658,42 @@
       min-width: 200px;
     }
 
+    .contact-extra {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .company-info .dl-row {
+      display: grid;
+      grid-template-columns: 6.8em 1fr;
+      gap: 8px;
+    }
+
+    .company-info dt {
+      font-weight: 700;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .company-info dd {
+      line-height: 1.65;
+    }
+
+    .map-embed {
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+    }
+
+    .map-embed iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
     /* ─── FOOTER ─── */
     footer {
       background: var(--ink);
@@ -920,6 +956,11 @@
         padding: 28px 20px;
       }
 
+      .contact-extra {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
       /* フッター */
       .footer-inner {
         flex-direction: column;
@@ -1098,6 +1139,39 @@
         <div class="contact-tel">
           <a class="contact-tel-link" href="tel:0854623122">0854-62-3122</a>
           <small>Local Impact Design 飯南株式会社（平日 9:00〜17:00）</small>
+        </div>
+      </div>
+      <div class="contact-extra">
+        <div class="company-info">
+          <dl class="company-dl">
+            <div class="dl-row">
+              <dt>会社名</dt>
+              <dd>Local Impact Design 飯南株式会社</dd>
+            </div>
+            <div class="dl-row">
+              <dt>代表取締役社長</dt>
+              <dd>小西 未祐</dd>
+            </div>
+            <div class="dl-row">
+              <dt>創業</dt>
+              <dd>2026年4月</dd>
+            </div>
+            <div class="dl-row">
+              <dt>住所</dt>
+              <dd>〒690-3513 島根県飯石郡飯南町下赤名830番地</dd>
+            </div>
+            <div class="dl-row">
+              <dt>電話番号</dt>
+              <dd><a class="contact-tel-link" href="tel:0854623122">0854-62-3122</a></dd>
+            </div>
+          </dl>
+        </div>
+        <div class="map-embed">
+          <iframe
+            src="https://maps.google.com/maps?q=35.0001576,132.7155656&z=17&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Local Impact Design 飯南株式会社 所在地地図"></iframe>
         </div>
       </div>
     </div>
