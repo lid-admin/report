@@ -1433,7 +1433,7 @@
       <button type="button" class="contact-modal-close" id="contact-modal-close" aria-label="閉じる">&times;</button>
       <p class="contact-modal-eyebrow">Contact</p>
       <h3 id="contact-modal-title">お問い合わせフォーム</h3>
-      <p class="sub">下記項目をご入力の上、送信してください。担当者より折り返しご連絡いたします。</p>
+      <p class="sub" id="contact-modal-sub">下記項目をご入力の上、送信してください。担当者より折り返しご連絡いたします。</p>
       <form id="contact-form" class="contact-form" action="https://formspree.io/f/xbgrnvbq" method="POST">
         <div class="field-row">
           <div class="field">
@@ -1632,6 +1632,7 @@
       const errorTextEl = document.getElementById('contact-form-error-text');
       const categorySelect = document.getElementById('contact-category');
       const subjectInput = document.getElementById('contact-subject');
+      const subEl = document.getElementById('contact-modal-sub');
       if (!openBtn || !modal || !frame || !closeBtn || !nameInput || !form) return;
 
       let lastFocused = null;
@@ -1665,7 +1666,22 @@
         }
       }
 
+      function resetFormState() {
+        form.reset();
+        form.style.display = '';
+        if (subEl) subEl.style.display = '';
+        successEl.classList.remove('is-visible');
+        errorEl.classList.remove('is-visible');
+        if (subjectInput) subjectInput.value = '[お問い合わせ種別未選択] Local Impact Design 飯南株式会社 お問い合わせ';
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn && !recaptchaFailed) submitBtn.disabled = false;
+        if (recaptchaLoaded && recaptchaWidgetId !== null) {
+          window.grecaptcha.reset(recaptchaWidgetId);
+        }
+      }
+
       function openModal() {
+        resetFormState();
         lastFocused = document.activeElement;
         lockedScrollY = window.scrollY;
         document.body.style.position = 'fixed';
@@ -1760,6 +1776,7 @@
           });
           if (!res.ok) throw new Error('submit failed');
           form.style.display = 'none';
+          if (subEl) subEl.style.display = 'none';
           successEl.classList.add('is-visible');
         } catch (err) {
           showError('送信に失敗しました。時間をおいて再度お試しいただくか、お電話にてお問い合わせください。');
