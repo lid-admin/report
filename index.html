@@ -694,6 +694,236 @@
       display: block;
     }
 
+    /* ─── CONTACT MODAL ─── */
+    .contact-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(15, 26, 13, 0.72);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      transition: opacity 0.28s ease;
+    }
+
+    .contact-modal.is-open {
+      display: flex;
+    }
+
+    .contact-modal.is-visible {
+      opacity: 1;
+    }
+
+    .contact-modal-frame {
+      position: relative;
+      width: min(92vw, 600px);
+      max-height: 88vh;
+      overflow-y: auto;
+      background: var(--white);
+      border-radius: 24px;
+      padding: 48px;
+      box-shadow: 0 32px 80px rgba(15, 26, 13, 0.35);
+      opacity: 0;
+      transition: opacity 0.28s ease;
+    }
+
+    .contact-modal-frame::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: 24px 24px 0 0;
+      background: linear-gradient(90deg, var(--green), var(--accent));
+    }
+
+    .contact-modal.is-visible .contact-modal-frame {
+      opacity: 1;
+    }
+
+    .contact-modal-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--lime);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .contact-modal-frame h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .contact-modal-frame .sub {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .contact-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 20px;
+      line-height: 1;
+      color: var(--muted);
+      cursor: pointer;
+      background: var(--sand);
+      border: none;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+
+    .contact-modal-close:hover {
+      background: var(--green);
+      color: #fff;
+      transform: scale(1.06);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .contact-modal,
+      .contact-modal-frame,
+      .contact-modal-close {
+        transition: none;
+      }
+    }
+
+    .contact-form .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .contact-form .field {
+      margin-bottom: 18px;
+    }
+
+    .contact-form label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    .contact-form label .req {
+      color: var(--green);
+      margin-left: 2px;
+    }
+
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+      width: 100%;
+      background: var(--sand);
+      border: 1.5px solid transparent;
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      font: inherit;
+      font-size: 14px;
+      color: var(--ink);
+      min-height: 46px;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: rgba(15, 26, 13, 0.32);
+    }
+
+    .contact-form input:focus,
+    .contact-form select:focus,
+    .contact-form textarea:focus {
+      outline: none;
+      background: #fff;
+      border-color: var(--lime);
+      box-shadow: 0 0 0 4px rgba(90, 158, 58, 0.14);
+    }
+
+    .contact-form textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+
+    .contact-form .field-consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--sand);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 24px;
+    }
+
+    .contact-form .field-consent input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-height: 0;
+      margin-top: 1px;
+      accent-color: var(--green);
+      flex-shrink: 0;
+    }
+
+    .contact-form .field-consent label {
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .contact-form #contact-recaptcha {
+      margin: 4px 0 24px;
+      transform: scale(0.95);
+      transform-origin: left;
+    }
+
+    .contact-form button[type="submit"] {
+      width: 100%;
+      justify-content: center;
+      margin-top: 4px;
+    }
+
+    .contact-form-success,
+    .contact-form-error {
+      display: none;
+      padding: 18px 20px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      line-height: 1.7;
+      border-left: 4px solid transparent;
+    }
+
+    .contact-form-success {
+      background: var(--sand);
+      border-left-color: var(--green);
+      color: var(--ink);
+    }
+
+    .contact-form-error {
+      background: #fdecea;
+      border-left-color: #b3261e;
+      color: #b3261e;
+    }
+
+    .contact-form-success.is-visible,
+    .contact-form-error.is-visible {
+      display: block;
+    }
+
     /* ─── FOOTER ─── */
     footer {
       background: var(--ink);
@@ -961,6 +1191,25 @@
         gap: 24px;
       }
 
+      .contact-modal-frame {
+        width: 100%;
+        max-height: 100dvh;
+        border-radius: 0;
+        padding: 28px 20px;
+      }
+
+      .contact-modal-frame::before {
+        border-radius: 0;
+      }
+
+      .contact-modal {
+        padding: 0;
+      }
+
+      .contact-form .field-row {
+        grid-template-columns: 1fr;
+      }
+
       /* フッター */
       .footer-inner {
         flex-direction: column;
@@ -1140,6 +1389,7 @@
           <a class="contact-tel-link" href="tel:0854623122">0854-62-3122</a>
           <small>Local Impact Design 飯南株式会社（平日 9:00〜17:00）</small>
         </div>
+        <button type="button" class="btn-primary" id="contact-form-open" aria-haspopup="dialog" aria-controls="contact-modal">問い合わせはこちら</button>
       </div>
       <div class="contact-extra">
         <div class="company-info">
@@ -1174,6 +1424,58 @@
             title="Local Impact Design 飯南株式会社 所在地地図"></iframe>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ─── お問い合わせフォーム モーダル ─── -->
+  <div class="contact-modal" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+    <div class="contact-modal-frame">
+      <button type="button" class="contact-modal-close" id="contact-modal-close" aria-label="閉じる">&times;</button>
+      <p class="contact-modal-eyebrow">Contact</p>
+      <h3 id="contact-modal-title">お問い合わせフォーム</h3>
+      <p class="sub">下記項目をご入力の上、送信してください。担当者より折り返しご連絡いたします。</p>
+      <form id="contact-form" class="contact-form" action="https://formspree.io/f/xbgrnvbq" method="POST">
+        <div class="field-row">
+          <div class="field">
+            <label for="contact-name">氏名<span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="contact-name" name="name" placeholder="山田 太郎" required>
+          </div>
+          <div class="field">
+            <label for="contact-email">メールアドレス<span class="req" aria-hidden="true">*</span></label>
+            <input type="email" id="contact-email" name="email" placeholder="you@example.com" required>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="contact-phone">電話番号（任意）</label>
+            <input type="tel" id="contact-phone" name="phone" placeholder="0854-62-3122" pattern="[0-9\-()+ ]*">
+          </div>
+          <div class="field">
+            <label for="contact-category">お問い合わせ種別<span class="req" aria-hidden="true">*</span></label>
+            <select id="contact-category" name="category" required>
+              <option value="" disabled selected>選択してください</option>
+              <option value="一般のお問い合わせ">一般のお問い合わせ</option>
+              <option value="連携について">連携について</option>
+              <option value="募集・応募について">募集・応募について</option>
+              <option value="取材・メディア関連">取材・メディア関連</option>
+              <option value="その他">その他</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="contact-message">問い合わせ内容<span class="req" aria-hidden="true">*</span></label>
+          <textarea id="contact-message" name="message" placeholder="お問い合わせ内容をご記入ください" required></textarea>
+        </div>
+        <input type="hidden" name="_subject" id="contact-subject" value="[お問い合わせ種別未選択] Local Impact Design 飯南株式会社 お問い合わせ">
+        <div class="field field-consent">
+          <input type="checkbox" id="contact-consent" name="consent" required>
+          <label for="contact-consent">ご記入いただいた個人情報はお問い合わせ対応の目的以外には使用しません</label>
+        </div>
+        <div id="contact-recaptcha"></div>
+        <button type="submit" class="btn-primary">送信する</button>
+      </form>
+      <div class="contact-form-success" id="contact-form-success" role="status">お問い合わせを受け付けました。担当者よりご連絡いたします。</div>
+      <div class="contact-form-error" id="contact-form-error" role="alert"><span id="contact-form-error-text">送信に失敗しました。時間をおいて再度お試しいただくか、お電話にてお問い合わせください。</span>（<a class="contact-tel-link" href="tel:0854623122">0854-62-3122</a>）</div>
     </div>
   </div>
 
@@ -1316,6 +1618,161 @@
     }
 
     initMobileNav();
+
+    // ─── お問い合わせフォーム モーダル ───
+    function initContactModal() {
+      const openBtn = document.getElementById('contact-form-open');
+      const modal = document.getElementById('contact-modal');
+      const frame = modal ? modal.querySelector('.contact-modal-frame') : null;
+      const closeBtn = document.getElementById('contact-modal-close');
+      const nameInput = document.getElementById('contact-name');
+      const form = document.getElementById('contact-form');
+      const successEl = document.getElementById('contact-form-success');
+      const errorEl = document.getElementById('contact-form-error');
+      const errorTextEl = document.getElementById('contact-form-error-text');
+      const categorySelect = document.getElementById('contact-category');
+      const subjectInput = document.getElementById('contact-subject');
+      if (!openBtn || !modal || !frame || !closeBtn || !nameInput || !form) return;
+
+      let lastFocused = null;
+      let lockedScrollY = 0;
+      let recaptchaWidgetId = null;
+      let recaptchaLoaded = false;
+      let recaptchaFailed = false;
+
+      function getFocusable() {
+        return Array.from(frame.querySelectorAll(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        ));
+      }
+
+      function onKeydown(e) {
+        if (e.key === 'Escape') {
+          closeModal();
+          return;
+        }
+        if (e.key !== 'Tab') return;
+        const focusable = getFocusable();
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+
+      function openModal() {
+        lastFocused = document.activeElement;
+        lockedScrollY = window.scrollY;
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${lockedScrollY}px`;
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        modal.classList.add('is-open');
+        requestAnimationFrame(() => modal.classList.add('is-visible'));
+        nameInput.focus();
+        document.addEventListener('keydown', onKeydown);
+        loadRecaptcha();
+      }
+
+      function closeModal() {
+        modal.classList.remove('is-visible');
+        setTimeout(() => modal.classList.remove('is-open'), 220);
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        window.scrollTo(0, lockedScrollY);
+        document.removeEventListener('keydown', onKeydown);
+        if (lastFocused) lastFocused.focus();
+      }
+
+      openBtn.addEventListener('click', openModal);
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+      function showError(message) {
+        if (errorTextEl) errorTextEl.textContent = message;
+        errorEl.classList.add('is-visible');
+      }
+
+      function renderRecaptcha() {
+        if (recaptchaLoaded) return;
+        recaptchaWidgetId = window.grecaptcha.render('contact-recaptcha', {
+          sitekey: '6Ldyz5ktAAAAAF2LXEPn20TjVSsUq9qdVENdewp-'
+        });
+        recaptchaLoaded = true;
+      }
+
+      function loadRecaptcha() {
+        if (recaptchaLoaded || recaptchaFailed) return;
+        if (window.grecaptcha && window.grecaptcha.render) {
+          renderRecaptcha();
+          return;
+        }
+        if (document.getElementById('recaptcha-api-script')) return;
+        window.__onRecaptchaApiLoad = renderRecaptcha;
+        const script = document.createElement('script');
+        script.id = 'recaptcha-api-script';
+        script.src = 'https://www.google.com/recaptcha/api.js?onload=__onRecaptchaApiLoad&render=explicit';
+        script.async = true;
+        script.defer = true;
+        script.onerror = () => {
+          recaptchaFailed = true;
+          const submitBtn = form.querySelector('button[type="submit"]');
+          if (submitBtn) submitBtn.disabled = true;
+          showError('現在フォームをご利用いただけません。お電話にてお問い合わせください。');
+        };
+        document.head.appendChild(script);
+      }
+
+      if (categorySelect && subjectInput) {
+        categorySelect.addEventListener('change', () => {
+          const label = categorySelect.value || 'お問い合わせ';
+          subjectInput.value = `[${label}] Local Impact Design 飯南株式会社 お問い合わせ`;
+        });
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorEl.classList.remove('is-visible');
+
+        if (recaptchaLoaded && recaptchaWidgetId !== null) {
+          const response = window.grecaptcha.getResponse(recaptchaWidgetId);
+          if (!response) {
+            showError('reCAPTCHAを完了してください。');
+            return;
+          }
+        }
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+
+        try {
+          const res = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { Accept: 'application/json' }
+          });
+          if (!res.ok) throw new Error('submit failed');
+          form.style.display = 'none';
+          successEl.classList.add('is-visible');
+        } catch (err) {
+          showError('送信に失敗しました。時間をおいて再度お試しいただくか、お電話にてお問い合わせください。');
+          if (recaptchaLoaded && recaptchaWidgetId !== null) {
+            window.grecaptcha.reset(recaptchaWidgetId);
+          }
+        } finally {
+          if (submitBtn) submitBtn.disabled = false;
+        }
+      });
+    }
+
+    initContactModal();
   </script>
 
 </body>
