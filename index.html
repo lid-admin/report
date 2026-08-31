@@ -885,6 +885,11 @@
       margin: 0;
     }
 
+    .contact-form .field-consent label a {
+      color: var(--green);
+      text-decoration: underline;
+    }
+
     .contact-form #contact-recaptcha {
       margin: 4px 0 24px;
       transform: scale(0.95);
@@ -974,10 +979,28 @@
       color: #fff;
     }
 
-    .footer-copy {
+    .footer-copy-row {
       max-width: 1100px;
       margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-copy {
       font-size: 11px;
+    }
+
+    .footer-legal a {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+      transition: color 0.2s;
+    }
+
+    .footer-legal a:hover {
+      color: #fff;
     }
 
     /* ─── NEWS ─── */
@@ -1224,6 +1247,12 @@
         align-items: center;
         min-height: 44px;
       }
+
+      .footer-copy-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
     }
 
     /* ─── SMALL PHONE (~374px) ─── */
@@ -1469,7 +1498,7 @@
         <input type="hidden" name="_subject" id="contact-subject" value="[お問い合わせ種別未選択] Local Impact Design 飯南株式会社 お問い合わせ">
         <div class="field field-consent">
           <input type="checkbox" id="contact-consent" name="consent" required>
-          <label for="contact-consent">ご記入いただいた個人情報はお問い合わせ対応の目的以外には使用しません</label>
+          <label for="contact-consent">ご記入いただいた個人情報はお問い合わせ対応の目的以外には使用しません。<a href="policy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意する</label>
         </div>
         <div id="contact-recaptcha"></div>
         <button type="submit" class="btn-primary">送信する</button>
@@ -1496,7 +1525,10 @@
         <a href="#" target="_blank" rel="noopener">↗ X (Twitter)（現在準備中です）</a>
       </div>
     </div>
-    <p class="footer-copy">&copy; 2026 Local Impact Design 飯南株式会社. All Rights Reserved.</p>
+    <div class="footer-copy-row">
+      <p class="footer-copy">&copy; 2026 Local Impact Design 飯南株式会社. All Rights Reserved.</p>
+      <p class="footer-legal"><a href="policy.html">プライバシーポリシー</a></p>
+    </div>
   </footer>
 
   <script>
