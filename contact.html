@@ -1009,7 +1009,10 @@
       function renderRecaptcha() {
         if (recaptchaLoaded) return;
         recaptchaWidgetId = window.grecaptcha.render('contact-recaptcha', {
-          sitekey: '6Ldyz5ktAAAAAF2LXEPn20TjVSsUq9qdVENdewp-'
+          sitekey: '6Ldyz5ktAAAAAF2LXEPn20TjVSsUq9qdVENdewp-',
+          'expired-callback': () => {
+            showError('reCAPTCHAの有効期限が切れました。お手数ですが、もう一度チェックしてから送信してください。');
+          }
         });
         recaptchaLoaded = true;
       }
