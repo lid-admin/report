@@ -442,6 +442,43 @@
       color: var(--muted);
     }
 
+    /* 記事が増えても初期表示を一定件数に保ち、ボタンで追記読み込みする */
+    .bento-more {
+      display: flex;
+      justify-content: center;
+      margin-top: 32px;
+    }
+
+    .bento-more[hidden] {
+      display: none;
+    }
+
+    .btn-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1.5px solid var(--green);
+      color: var(--green);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 12px 28px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-more:hover {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .btn-more::after {
+      content: '\2193';
+    }
+
     /* ─── DARK BAND ─── */
     .band {
       background: var(--ink);
@@ -1009,6 +1046,26 @@
       flex-direction: column;
       gap: 0;
       border-top: 1px solid var(--border);
+      /* 件数が増えてもページが間延びしないよう、リスト内でスクロールさせる */
+      max-height: 360px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding-right: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    }
+
+    .news-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .news-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .news-list::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
     }
 
     .news-item {
@@ -1165,6 +1222,11 @@
       }
 
       /* ニュース */
+      .news-list {
+        max-height: 300px;
+        padding-right: 6px;
+      }
+
       .news-item {
         padding: 0;
       }
@@ -1334,6 +1396,9 @@
     <h2 class="section-title">活動レポート</h2>
     <div id="bento" class="bento">
       <div class="bento-loading">読み込み中…</div>
+    </div>
+    <div class="bento-more" id="bento-more" hidden>
+      <button type="button" class="btn-more" id="bento-more-btn">もっと見る</button>
     </div>
   </div>
 
@@ -1557,6 +1622,39 @@
       </a>`;
     }
 
+    // 初回表示は featured 1件 + side 6件、以降は「もっと見る」で6件ずつ追記
+    const REPORTS_INITIAL = 7;
+    const REPORTS_STEP = 6;
+
+    let allReports = [];
+    let shownReports = 0;
+
+    function updateReportsMore() {
+      const wrap = document.getElementById('bento-more');
+      const btn = document.getElementById('bento-more-btn');
+      const rest = allReports.length - shownReports;
+      if (rest <= 0) {
+        wrap.hidden = true;
+        return;
+      }
+      wrap.hidden = false;
+      btn.textContent = `もっと見る（残り${rest}件）`;
+    }
+
+    // 追記した先頭カードを返す（キーボード操作時のフォーカス移動用）
+    function appendReports(count) {
+      const bento = document.getElementById('bento');
+      const slice = allReports.slice(shownReports, shownReports + count);
+      const html = slice
+        .map((r, i) => buildCard(r, shownReports + i === 0 ? 'featured' : 'side'))
+        .join('');
+      bento.insertAdjacentHTML('beforeend', html);
+      const firstNew = bento.children[shownReports] || null;
+      shownReports += slice.length;
+      updateReportsMore();
+      return firstNew;
+    }
+
     async function loadReports() {
       const bento = document.getElementById('bento');
       try {
@@ -1570,15 +1668,20 @@
           return;
         }
 
-        let html = buildCard(reports[0], 'featured');
-        for (let i = 1; i < reports.length; i++) {
-          html += buildCard(reports[i], 'side');
-        }
-        bento.innerHTML = html;
+        allReports = reports;
+        shownReports = 0;
+        bento.innerHTML = '';
+        appendReports(REPORTS_INITIAL);
       } catch (e) {
         bento.innerHTML = '<div class="bento-loading" style="color:#c00;">記事の読み込みに失敗しました</div>';
       }
     }
+
+    document.getElementById('bento-more-btn').addEventListener('click', () => {
+      const firstNew = appendReports(REPORTS_STEP);
+      // 全件表示でボタンが消えるとフォーカスが body に飛ぶため、追記分の先頭へ移す
+      if (firstNew) firstNew.focus({ preventScroll: true });
+    });
 
     loadReports();
 
